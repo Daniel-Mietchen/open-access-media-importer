@@ -99,7 +99,6 @@ def list_articles(target_directory, supplementary_materials=False, skip=[]):
                     result['article-date'] = _get_article_date(tree)
                     result['article-url'] = _get_article_url(tree)
                     result['article-license-url'] = _get_article_license_url(tree)
-                    result['article-copyright-holder'] = _get_article_copyright_holder(tree)
                     result['article-categories'] = _get_article_categories(tree)
 
                     if supplementary_materials:
@@ -527,30 +526,6 @@ def _get_article_license_url(tree):
     else:
         return None
 
-def _get_article_copyright_holder(tree):
-    """
-    Given an ElementTree, returns article copyright holder.
-    """
-    copyright_holder = ElementTree(tree).find(
-        'front/article-meta/permissions/copyright-holder'
-    )
-    try:
-        copyright_holder = copyright_holder.text
-        if copyright_holder is not None:
-            return copyright_holder
-    except AttributeError:  # no copyright_holder known
-        pass
-
-    copyright_statement = \
-        ElementTree(tree).find('.//*copyright-statement')
-    try:
-        copyright_statement = copyright_statement.text
-        if copyright_statement is not None:
-            return copyright_statement.split('.')[0] + '.'
-    except AttributeError:
-        pass
-
-    return None
 
 def _get_supplementary_materials(tree):
     """
