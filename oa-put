@@ -22,13 +22,13 @@ except IndexError:  # no arguments given
     stderr.write("""
 oa-put – Open Access Importer upload operations
 
-usage:  oa-put upload-media [source]
+usage:  oa-put [upload-media, upload-media-to-youtube] [source]
 
 """)
     exit(1)
 
 try:
-    assert(action in ['upload-media'])
+    assert(action in ['upload-media', 'upload-media-to-youtube'])
 except AssertionError:  # invalid action
     stderr.write("Unknown action “%s”.\n" % action)
     exit(2)
@@ -118,3 +118,83 @@ if action == 'upload-media':
         material.uploaded = True
         session.commit()
         sleep(10)  # 6 uploads per minute
+
+# Adds youtube upload action
+if action == 'upload-media-to-youtube':
+    media_refined_directory = config.get_media_refined_source_path(target)
+
+    materials = SupplementaryMaterial.query.filter_by(
+        converted=True,
+        uploaded_to_youtube=False
+    ).all()
+    for material in materials:
+        url_path = urlparse.urlsplit(material.url).path
+        filename = url_path.split('/')[-1] + '.ogv'
+        media_refined_path = path.join(media_refined_directory, filename)
+
+        if (path.getsize(media_refined_path) == 0):
+            material.converted=False
+            continue
+
+        if youtube.is_uploaded(material):
+            stderr.write("Skipping “%s”, already exists at <%s>.\n" % (
+                media_refined_path.encode('utf-8'),
+                config.api_url.encode('utf-8')
+            ))
+            material.uploaded=True
+            continue
+
+        article_doi = material.article.doi
+        article_pmid = efetch.get_pmid_from_doi(article_doi)
+        article_pmcid = efetch.get_pmcid_from_doi(article_doi)
+        authors = material.article.contrib_authors
+        article_title = material.article.title
+        journal_title = material.article.journal.title
+        article_year = material.article.year
+        article_month = material.article.month
+        article_day = material.article.day
+        article_url = material.article.url
+        license_url = material.article.license_url
+        rights_holder = material.article.copyright_holder
+        label = material.label
+        title = material.title
+        caption = material.caption
+        categories = [category.name for category in material.article.categories]
+        if article_pmid is not None:
+            categories += efetch.get_categories_from_pmid(article_pmid)
+
+        #TODO: file extension should be adapted for other file formats
+        wiki_filename = '.'.join(filename.split('.')[:-2]) + '.ogv'
+        if article_title is not None:
+            dirty_prefix = article_title
+            dirty_prefix = dirty_prefix.replace('\n', '')
+            dirty_prefix = ' '.join(dirty_prefix.split()) # remove multiple spaces
+            forbidden_chars = u"""?,;:^/!<>"`'±#[]|{}ʻʾʿ᾿῾‘’“”"""
+            for character in forbidden_chars:
+                dirty_prefix = dirty_prefix.replace(character, '')
+            # prefix is first hundred chars of title sans forbidden characters
+            prefix = '-'.join(dirty_prefix[:100].split(' '))
+            # if original title is longer than cleaned up title, remove last word
+            if len(dirty_prefix) > len(prefix):
+                prefix = '-'.join(prefix.split('-')[:-1])
+            if prefix[-1] != '-':
+               prefix += '-'
+            wiki_filename = prefix + wiki_filename
+
+        page_template = template.page(article_doi, article_pmid, \
+            article_pmcid, authors, article_title, journal_title, \
+            article_year, article_month, article_day, article_url, \
+            license_url, label, caption, title, categories)
+
+        youtube.upload(media_refined_path, wiki_filename, page_template)
+
+        stderr.write("“%s” uploaded to <%s>.\n" % (
+            media_refined_path.encode('utf-8'),
+            config.api_url.encode('utf-8')
+        ))
+
+        material.uploaded_to_youtube = True
+        session.commit()
+        sleep(10)  # 6 uploads per minute
+
+
