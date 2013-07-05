@@ -158,8 +158,8 @@ if __name__ == '__main__':
     help="Video keywords, comma separated", default="")
   parser.add_option("--license", dest="license",
     help="either 'creativeCommon' or 'youtube'", default="creativeCommon")
-  parser.add_option("--privacyStatus", dest="privacyStatus", help="Video privacy status",
-    default="unlisted")
+  parser.add_option("--privacyStatus", dest="privacyStatus",
+    help="Video privacy status, e.g. 'public' or 'unlisted'", default="unlisted")
   (options, args) = parser.parse_args()
 
   if options.file is None or not os.path.exists(options.file):

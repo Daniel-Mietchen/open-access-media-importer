@@ -120,6 +120,14 @@ if action == 'upload-media':
         sleep(10)  # 6 uploads per minute
 
 # Adds youtube upload action
+''' What this should do (@TODO):
+    1. Find the files yet to be uploaded to youtube according to our DB
+    1. Check against videos already uploaded to youtube (my_uploads)
+    2. Grab the right metadata from our DB
+    3. Set the proper flags in our requests to the Youtube API,
+       which handles authentication (oauth2) and is a CLI.
+    4. Make the upload, report any error or status to the log.
+    5. Update our DB with data from response and set youtube_uploaded bit. '''
 if action == 'upload-media-to-youtube':
     media_refined_directory = config.get_media_refined_source_path(target)
 
@@ -141,22 +149,29 @@ if action == 'upload-media-to-youtube':
                 media_refined_path.encode('utf-8'),
                 config.api_url.encode('utf-8')
             ))
-            material.uploaded=True
+            material.uploaded_to_youtube=True
             continue
 
-        article_doi = material.article.doi
-        article_pmid = efetch.get_pmid_from_doi(article_doi)
-        article_pmcid = efetch.get_pmcid_from_doi(article_doi)
+        # @TODO: what information does Youtube need for upload_video?
+        # file, title, description, category, keywords, license, privacyStatus
+        # The description can take URLs, will auto-convert to links
+        # Daniel wants: link to commons, doi, and direct download
+        # Seems reasonable to me to add various metadata in there as well. 
+        # Hmmm... need to investigate individual dois for materials (if exist)
+        article_doi = 'DOI:' + material.article.doi
+        article_pmid = 'PMID:' + efetch.get_pmid_from_doi(article_doi)
+        article_pmcid = 'PMCID:' + efetch.get_pmcid_from_doi(article_doi)
         authors = material.article.contrib_authors
         article_title = material.article.title
         journal_title = material.article.journal.title
         article_year = material.article.year
         article_month = material.article.month
         article_day = material.article.day
+        article_date = '/'.join([article_year, article_month, article_day])
         article_url = material.article.url
         license_url = material.article.license_url
         rights_holder = material.article.copyright_holder
-        label = material.label
+        label = material.label # name of item w/r/t article text e.g. "Video 1"
         title = material.title
         caption = material.caption
         categories = [category.name for category in material.article.categories]
@@ -164,7 +179,7 @@ if action == 'upload-media-to-youtube':
             categories += efetch.get_categories_from_pmid(article_pmid)
 
         #TODO: file extension should be adapted for other file formats
-        wiki_filename = '.'.join(filename.split('.')[:-2]) + '.ogv'
+        youtube_filename = '.'.join(filename.split('.')[:-2]) + '.ogv'
         if article_title is not None:
             dirty_prefix = article_title
             dirty_prefix = dirty_prefix.replace('\n', '')
@@ -179,14 +194,17 @@ if action == 'upload-media-to-youtube':
                 prefix = '-'.join(prefix.split('-')[:-1])
             if prefix[-1] != '-':
                prefix += '-'
-            wiki_filename = prefix + wiki_filename
-
-        page_template = template.page(article_doi, article_pmid, \
+            youtube_filename = prefix + youtube_filename
+        full_file=''.join(media_refined_path, youtube_filename)
+        description = ', '.join(article_doi, article_pmid, \
             article_pmcid, authors, article_title, journal_title, \
-            article_year, article_month, article_day, article_url, \
-            license_url, label, caption, title, categories)
+            article_date, article_url, license_rul, rights_holder, \
+            label, title, categories, caption)
+        keywords = categories
+        license='creativeCommon'
+        privacy_status='public'
 
-        youtube.upload(media_refined_path, wiki_filename, page_template)
+        youtube.upload(full_file, title, description, category, keywords, license, privacy_status)
 
         stderr.write("“%s” uploaded to <%s>.\n" % (
             media_refined_path.encode('utf-8'),

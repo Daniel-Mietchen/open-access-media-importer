@@ -98,7 +98,8 @@ def is_uploaded(material):
                   # show up in search results.
 
 # @TODO definitely update this, sort of the crux ;)
-def upload(filename, wiki_filename, page_template):
+# file, title, description, category, keywords, license, privacyStatus
+def upload(file, title, description, category, keywords, license, privacy_status):
     """
     Uploades a file to a mediawiki site.
     """
