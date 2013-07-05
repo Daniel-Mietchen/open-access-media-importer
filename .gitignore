@@ -1,1 +1,3 @@
 *.pyc
+userconfig
+client_secrets.json
