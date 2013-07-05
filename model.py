@@ -52,6 +52,8 @@ class SupplementaryMaterial(Entity):
     converting = Field(Boolean, default=False)
     converted = Field(Boolean, default=False)
     uploaded = Field(Boolean, default=False)
+    uploaded_to_youtube = Field(Boolean, default=False)
+    youtube_id = Field(UnicodeText)
 
     def __repr__(self):
         return '<SupplementaryMaterial “%s” of Article “%s”>' % \
