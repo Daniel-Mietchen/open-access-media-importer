@@ -168,7 +168,7 @@ if action == 'upload-media-to-youtube':
         article_year = material.article.year
         article_month = material.article.month
         article_day = material.article.day
-        article_date = '/'.join([article_year, article_month, article_day])
+        article_date = '/'.join([str(article_year), str(article_month), str(article_day)])
         article_url = material.article.url
         license_url = material.article.license_url
         rights_holder = material.article.copyright_holder
