@@ -7,6 +7,8 @@ from werkzeug.contrib.cache import SimpleCache
 
 is_uploaded_to_youtube_cache = SimpleCache()
 
+from subprocess import call
+
 # @TODO formulate correct youtube query
 def query(params):
     request = # @TODO use api request defined in youtube library
@@ -17,8 +19,8 @@ def query(params):
         return query(request)
 
 # @TODO is this possible, to get a list of all the uploads for this acct?
-# This is for reporting on uploads made, not for the import
-def get_uploads():
+# This is for reporting on uploads made, not for the import, low priority
+'''def get_uploads():
     params = {
         'action': 'query',
         'list': 'usercontribs',
@@ -31,9 +33,10 @@ def get_uploads():
             for uc in result[u'query'][u'usercontribs'] \
             if uc[u'ns'] == 6 and u'new' in uc.keys()
     ]
+'''
 
-# @TODO need to implement for youtube
-def is_uploaded(material):
+# @TODO need to implement for youtube -- see branch youtube_my_uploads :(
+'''def is_uploaded(material):
     """
     Determines if supplementary material is already uploaded--by us ;)
 
@@ -98,18 +101,14 @@ def is_uploaded(material):
             return True
     return False  # Caveat: This might be wrong if redirects do not
                   # show up in search results.
+'''
 
 # @TODO definitely update this, sort of the crux ;)
 # file, title, description, category, keywords, license, privacyStatus
-def upload(file, title, description, category, keywords, license, privacy_status):
+def upload(full_file, title, description, category, keywords, license, privacy_status):
     """
     Uploads a file to a mediawiki site.
     """
-    stderr.write('Authenticating with <%s>.\n' % config.api_url)
-    wiki.login(username=config.username, password=config.password)
-    wiki_file = wikitools.wikifile.File(wiki=wiki, title=wiki_filename)
-    wiki_file.upload(
-        fileobj = open(filename, 'r'),
-        text=page_template.encode('utf-8'),
-        comment = 'Automatically uploaded media file from [[:en:Open access|Open Access]] source. Please report problems or suggestions [[User talk:Open Access Media Importer Bot|here]].'
+    stderr.write('Authenticating with youtube.')
+    call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
     )

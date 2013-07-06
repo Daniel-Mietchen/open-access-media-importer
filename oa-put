@@ -144,6 +144,8 @@ if action == 'upload-media-to-youtube':
             material.converted=False
             continue
 
+        # not exactly working at the moment, silly oauth issue with youtube api
+        '''
         if youtube.is_uploaded(material):
             stderr.write("Skipping “%s”, already exists at <%s>.\n" % (
                 media_refined_path.encode('utf-8'),
@@ -151,6 +153,7 @@ if action == 'upload-media-to-youtube':
             ))
             material.uploaded_to_youtube=True
             continue
+        '''
 
         # @TODO:
         # The description can take URLs, will auto-convert to links
@@ -194,8 +197,8 @@ if action == 'upload-media-to-youtube':
                prefix += '-'
             youtube_filename = prefix + youtube_filename
         full_file=''.join(media_refined_path, youtube_filename)
-        description = ', '.join(article_doi, article_pmid, \
-            article_pmcid, authors, article_title, journal_title, \
+        description = ', '.join(article_doi, "<br>", article_pmid, "<p>", \
+            article_pmcid, "</p>", authors, article_title, journal_title, \
             article_date, article_url, license_url, rights_holder, \
             label, title, categories, caption)
         keywords = categories
@@ -206,7 +209,7 @@ if action == 'upload-media-to-youtube':
 
         stderr.write("“%s” uploaded to <%s>.\n" % (
             media_refined_path.encode('utf-8'),
-            config.api_url.encode('utf-8')
+            "youtube."
         ))
 
         material.uploaded_to_youtube = True
