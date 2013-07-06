@@ -152,13 +152,11 @@ if action == 'upload-media-to-youtube':
             material.uploaded_to_youtube=True
             continue
 
-        # @TODO: what information does Youtube need for upload_video?
-        # file, title, description, category, keywords, license, privacyStatus
+        # @TODO:
         # The description can take URLs, will auto-convert to links
         # Daniel wants: link to commons, doi, and direct download
-        # Seems reasonable to me to add various metadata in there as well. 
         # Hmmm... need to investigate individual dois for materials (if exist)
-        article_doi = 'DOI:' + material.article.doi
+        article_doi = 'Article DOI:' + material.article.doi
         article_pmid = 'PMID:' + efetch.get_pmid_from_doi(article_doi)
         article_pmcid = 'PMCID:' + efetch.get_pmcid_from_doi(article_doi)
         authors = material.article.contrib_authors
@@ -198,7 +196,7 @@ if action == 'upload-media-to-youtube':
         full_file=''.join(media_refined_path, youtube_filename)
         description = ', '.join(article_doi, article_pmid, \
             article_pmcid, authors, article_title, journal_title, \
-            article_date, article_url, license_rul, rights_holder, \
+            article_date, article_url, license_url, rights_holder, \
             label, title, categories, caption)
         keywords = categories
         license='creativeCommon'
@@ -213,6 +211,6 @@ if action == 'upload-media-to-youtube':
 
         material.uploaded_to_youtube = True
         session.commit()
-        sleep(10)  # 6 uploads per minute
+        sleep(10)  # ? uploads per minute
 
 
