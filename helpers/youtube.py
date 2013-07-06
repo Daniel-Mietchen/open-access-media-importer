@@ -10,13 +10,14 @@ is_uploaded_to_youtube_cache = SimpleCache()
 from subprocess import call
 
 # @TODO formulate correct youtube query
-def query(params):
+'''def query(params):
     request = # @TODO use api request defined in youtube library
     try:
         return request.query()
     except wikitools.api.APIError: # @TODO same error type?
         stderr.write('Mediawiki API request failed, retrying.\n')
         return query(request)
+'''
 
 # @TODO is this possible, to get a list of all the uploads for this acct?
 # This is for reporting on uploads made, not for the import, low priority
