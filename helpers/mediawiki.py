@@ -105,7 +105,7 @@ def is_uploaded(material):
 
 def upload(filename, wiki_filename, page_template):
     """
-    Uploades a file to a mediawiki site.
+    Uploads a file to a mediawiki site.
     """
     stderr.write('Authenticating with <%s>.\n' % config.api_url)
     wiki.login(username=config.username, password=config.password)
