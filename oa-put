@@ -197,10 +197,10 @@ if action == 'upload-media-to-youtube':
                prefix += '-'
             youtube_filename = prefix + youtube_filename
         full_file=''.join([media_refined_path, youtube_filename])
-        description = ', '.join([article_doi, "<br>", article_pmid, "<p>", \
-            article_pmcid, "</p>", authors, article_title, journal_title, \
-            article_date, article_url, license_url, rights_holder, \
-            label, title, categories, caption])
+        description = ', '.join([str(article_doi), "<br>", str(article_pmid), "<p>", \
+            str(article_pmcid), "</p>", str(authors), str(article_title), str(journal_title), \
+            str(article_date), str(article_url), str(license_url), str(rights_holder), \
+            str(label), str(title), str(categories), str(caption)])
         keywords = categories
         license='creativeCommon'
         privacy_status='public'
