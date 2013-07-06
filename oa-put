@@ -201,6 +201,7 @@ if action == 'upload-media-to-youtube':
             str(article_pmcid), "</p>", str(authors), str(article_title), str(journal_title), \
             str(article_date), str(article_url), str(license_url), str(rights_holder), \
             str(label), str(title), str(categories), str(caption)])
+        category = 28
         keywords = categories
         license='creativeCommon'
         privacy_status='public'
