@@ -17,6 +17,7 @@ def query(params):
         return query(request)
 
 # @TODO is this possible, to get a list of all the uploads for this acct?
+# This is for reporting on uploads made, not for the import
 def get_uploads():
     params = {
         'action': 'query',
@@ -34,9 +35,10 @@ def get_uploads():
 # @TODO need to implement for youtube
 def is_uploaded(material):
     """
-    Determines if supplementary material is already uploaded.
+    Determines if supplementary material is already uploaded--by us ;)
 
-    First, queries MediaWiki API by article DOI, then filters results.
+    First, queries Youtube API our uploads, then filters by DOI
+
     """
     result = is_uploaded_to_youtube_cache.get(material.article.doi)
     if result is None:
@@ -101,7 +103,7 @@ def is_uploaded(material):
 # file, title, description, category, keywords, license, privacyStatus
 def upload(file, title, description, category, keywords, license, privacy_status):
     """
-    Uploades a file to a mediawiki site.
+    Uploads a file to a mediawiki site.
     """
     stderr.write('Authenticating with <%s>.\n' % config.api_url)
     wiki.login(username=config.username, password=config.password)
