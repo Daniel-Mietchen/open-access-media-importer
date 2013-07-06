@@ -159,9 +159,9 @@ if action == 'upload-media-to-youtube':
         # The description can take URLs, will auto-convert to links
         # Daniel wants: link to commons, doi, and direct download
         # Hmmm... need to investigate individual dois for materials (if exist)
-        article_doi = 'Article DOI: ' + material.article.doi
-        article_pmid = 'PMID: ' + str(efetch.get_pmid_from_doi(article_doi))
-        article_pmcid = 'PMCID:' + str(efetch.get_pmcid_from_doi(article_doi))
+        article_doi = material.article.doi
+        article_pmid = efetch.get_pmid_from_doi(article_doi)
+        article_pmcid = efetch.get_pmcid_from_doi(article_doi)
         authors = material.article.contrib_authors
         article_title = material.article.title
         journal_title = material.article.journal.title
