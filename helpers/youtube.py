@@ -111,4 +111,8 @@ def upload(full_file, title, description, category, keywords, license, privacy_s
     Uploads a file to a mediawiki site.
     """
     stderr.write('Authenticating with youtube.')
-    call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
+    try:
+        call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
+    except:
+    stderr.write('Unable to use call to execute youtube api upload')
+

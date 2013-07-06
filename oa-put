@@ -196,17 +196,18 @@ if action == 'upload-media-to-youtube':
             if prefix[-1] != '-':
                prefix += '-'
             youtube_filename = prefix + youtube_filename
-        full_file=''.join([media_refined_path, youtube_filename])
+        # full_file=''.join([media_refined_path, youtube_filename])
+        full_file = media_refined_path
+        keywords = "; ".join(categories)
         description = ', '.join([str(article_doi), "<br>", str(article_pmid), "<p>", \
             str(article_pmcid), "</p>", str(authors), str(article_title), str(journal_title), \
             str(article_date), str(article_url), str(license_url), str(rights_holder), \
-            str(label), str(title), str(categories), str(caption)])
+            str(title), keywords, str(caption)])
         category = '28'
-        keywords = categories
         license='creativeCommon'
         privacy_status='public'
 
-        youtube.upload(full_file, str(title), description, category, keywords, license, privacy_status)
+        youtube.upload(full_file, youtube_filename, description, category, keywords, license, privacy_status)
 
         stderr.write("“%s” uploaded to <%s>.\n" % (
             media_refined_path.encode('utf-8'),
