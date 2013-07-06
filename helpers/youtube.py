@@ -112,4 +112,3 @@ def upload(full_file, title, description, category, keywords, license, privacy_s
     """
     stderr.write('Authenticating with youtube.')
     call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
-    )
