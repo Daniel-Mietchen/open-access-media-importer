@@ -184,13 +184,13 @@ if action == 'download-media':
         if mimetype not in ['audio', 'video']:
             continue
 
-        if mediawiki.is_uploaded(material):
+        '''if mediawiki.is_uploaded(material):
             stderr.write("Skipping <%s>, already exists at <%s>.\n" % (
                 material.url,
                 config.api_url.encode('utf-8')
             ))
             material.uploaded=True
-            continue
+            continue'''
 
         url = material.url
         try:
