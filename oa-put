@@ -196,7 +196,7 @@ if action == 'upload-media-to-youtube':
             if prefix[-1] != '-':
                prefix += '-'
             youtube_filename = prefix + youtube_filename
-        full_file=''.join(media_refined_path, youtube_filename)
+        full_file=''.join([media_refined_path, youtube_filename])
         description = ', '.join(article_doi, "<br>", article_pmid, "<p>", \
             article_pmcid, "</p>", authors, article_title, journal_title, \
             article_date, article_url, license_url, rights_holder, \
