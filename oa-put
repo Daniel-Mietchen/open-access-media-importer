@@ -11,7 +11,7 @@ import csv
 # <http://lethain.com/handling-very-large-csv-and-xml-files-in-python/>
 csv.field_size_limit(999999999)
 
-from helpers import config, efetch, mediawiki, template
+from helpers import config, efetch, mediawiki, template, youtube
 from model import session, setup_all, create_all, set_source, \
     Article, Journal, SupplementaryMaterial
 
