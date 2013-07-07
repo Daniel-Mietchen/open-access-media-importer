@@ -15,6 +15,8 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
 from optparse import OptionParser
 
+import logging
+logging.basicConfig()
 
 # Explicitly tell the underlying HTTP transport library not to retry, since
 # we are handling retry logic ourselves.
