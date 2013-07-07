@@ -1,3 +1,4 @@
 *.pyc
 userconfig
 client_secrets.json
+*-oauth2.json
