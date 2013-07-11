@@ -198,7 +198,8 @@ if action == 'upload-media-to-youtube':
             youtube_filename = prefix + youtube_filename
         # full_file=''.join([media_refined_path, youtube_filename])
         full_file = media_refined_path
-        keywords = ",".join(categories.append("openaccess")
+        categories.append("open access")
+        keywords = ",".join(categories)
         description = '; '.join([str(article_doi), "<br>", str(article_pmid), "<p>", \
             str(article_pmcid), "</p>", str(authors), str(article_title), str(journal_title), \
             str(article_date), str(article_url), str(license_url), str(rights_holder), \

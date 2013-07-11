@@ -8,6 +8,7 @@ from werkzeug.contrib.cache import SimpleCache
 is_uploaded_to_youtube_cache = SimpleCache()
 
 from subprocess import call
+from os import system
 
 # @TODO formulate correct youtube query
 '''def query(params):
@@ -111,6 +112,7 @@ def upload(full_file, title, description, category, keywords, license, privacy_s
     Uploads a file to a mediawiki site.
     """
     stderr.write('\nUploading with youtube...\n')
-    call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
+#    call(["youtube/youtube_upload_video.py", "--file", full_file, "--title", title, "--description", description, "--category", category, "--keywords", keywords, "--license", license, "--privacyStatus", privacy_status])
+    system("helpers/youtubetools/youtube_upload_video.py " + " --file " + full_file + " --title " + title + " --description " + description + " --category " + category + " --keywords"+ keywords + " --license " + license + " --privacyStatus " + privacy_status)
     stderr.write('\nUnable to use call to execute youtube api upload\n')
 
