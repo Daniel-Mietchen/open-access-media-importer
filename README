@@ -1,17 +1,15 @@
 The aim of this project is to write a tool that would:
 * regularly spider PubMed Central to locate audio and video files published in the supplementary materials of CC BY-licensed articles in the Open subset
-* convert these files to OGG
-* upload them to Wikimedia Commons, along with the respective metadata
+* upload these files to YouTube, along with the respective metadata
 * provide for easy extension to other CC-BY sources, beyond PubMed Central
-* (possibly) suggest Wikipedia articles for which the video might be relevant
+
+It builds on the Open Access Media Importer Bot that imports audio and video files from PubMed Central into Wikimedia Commons.
 
 Wiki page:
-    http://en.wikiversity.org/wiki/User:OpenScientist/Open_grant_writing/Wissenswert_2011
+    http://commons.wikimedia.org/wiki/User:Open_Access_Media_Importer_Bot
 
-Commands:
-    oa-get [download-metadata|download-media] [dummy|pmc|pmc_doi]
-    oa-cache [browse-database|clear-database|clear-media|convert-media|find-media|list-articles|stats] [dummy|pmc|pmc_doi]
-    oa-put upload-media [dummy|pmc|pmc_doi]
+Code: 
+    https://github.com/wpoa/open-access-media-importer
 
 Dependencies:
     python-dateutil <http://pypi.python.org/pypi/python-dateutil>
@@ -26,10 +24,3 @@ Dependencies:
 
 Recommendations:
     sqlitebrowser <http://sqlitebrowser.sourceforge.net/>
-
-To use the upload feature of oa-put, copy the userconfig.example file to
-“$HOME/config/open-access-media-importer/userconfig”.
-
-A screencast showing usage can be played back with “ttyplay screencast”.
-
-To plot mimetypes occurring in sources, install python-matplotlib and pipe the output of “oa-cache stats [source]” to the included plot-helper script.
